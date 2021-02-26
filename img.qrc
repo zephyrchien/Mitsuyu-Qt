@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icon/mitsuyu">
+        <file>img/mitsuyu.jpeg</file>
+        <file>img/grpc.jpg</file>
+    </qresource>
+</RCC>
