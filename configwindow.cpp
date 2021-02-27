@@ -8,6 +8,7 @@ ConfigWindow::ConfigWindow(QWidget *parent, std::shared_ptr<Config> _config) :
 {
     setAttribute(Qt::WA_QuitOnClose,false);
     ui->setupUi(this);
+    loadOriginValue();
 }
 
 ConfigWindow::~ConfigWindow()
@@ -45,3 +46,13 @@ void ConfigWindow::on_edit_addr_editingFinished()
 {
     ui->edit_sni->setText(ui->edit_addr->text().split(":")[0]);
 }
+
+void ConfigWindow::loadOriginValue()
+{
+    QJsonObject& c = config->getConfig();
+    ui->edit_addr->setText(c.contains("remote") ? c.value("remote").toString(): "");
+    ui->edit_sname->setText(c.contains("service_name") ? c.value("service_name").toString(): "");
+    ui->edit_sni->setText(c.contains("tls_sni") ? c.value("tls_sni").toString(): "");
+    ui->check_verify->setChecked((c.contains("tls_verify") && c.value("tls_verify") == "true") ? true : false);
+    ui->check_compress->setChecked((c.contains("compress") && c.value("compress") == "true") ? true : false);
+};

@@ -21,9 +21,11 @@ public:
 private:
     Ui::ConfigWindow *ui;
     std::shared_ptr<Config> config;
+    void loadOriginValue();
 
 signals:
     void closeWindowSignal();
+
 private slots:
     void on_btn_rst_clicked();
     void on_btn_ok_clicked();

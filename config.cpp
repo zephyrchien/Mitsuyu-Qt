@@ -8,7 +8,7 @@ Config::Config(const QString _base_path, const QString _config_file):
     setConfigDefaultValue("log","info");
     setConfigDefaultValue("local","127.0.0.1:1080");
     setConfigDefaultValue("tls","true");
-    setConfigDefaultValue("tls_verfiy","true");
+    setConfigDefaultValue("tls_verify","true");
     setConfigDefaultValue("compress","true");
 }
 

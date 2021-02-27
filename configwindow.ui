@@ -39,7 +39,7 @@
     </font>
    </property>
    <property name="text">
-    <string>www.example.com:443</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="label_add">
@@ -96,7 +96,7 @@
     </font>
    </property>
    <property name="text">
-    <string>mitsuyux</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="edit_sni">
@@ -115,7 +115,7 @@
     </font>
    </property>
    <property name="text">
-    <string>www.example.com</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="label_sni">
@@ -162,7 +162,7 @@
     <string>verify</string>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QCheckBox" name="check_compress">
@@ -184,7 +184,7 @@
     <string>compress</string>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_ok">

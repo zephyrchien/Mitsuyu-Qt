@@ -60,12 +60,22 @@ void MainWindow::oncore_start()
         return;
     }
     QString core_cmd = c.value("core").toString();
-    QString core_arg = " -m client -c " + config->getConfigFile();
+    QStringList core_args{"-m","client","-c",config->getConfigFile()};
+    // tips
+    ui->logs->append("prepare to start core process..");
+    ui->logs->append("directory: " + config->getBasePath());
+    ui->logs->append("command: " + core_cmd);
+    for (int i = 0, l = core_args.length(); i < l; i++)
+    {
+        ui->logs->append(QStringLiteral("argument[%1]: ").arg(i+1) + core_args[i]);
+    }
+    ui->logs->append("\n");
+
     core_process = std::make_unique<QProcess>(this);
     core_process->setReadChannel(QProcess::StandardOutput);
     connect(core_process.get(),SIGNAL(readyReadStandardOutput()),this,SLOT(onread_output()));
     connect(core_process.get(),SIGNAL(error(QProcess::ProcessError)),this,SLOT(oncore_error(QProcess::ProcessError)));
-    core_process->start(core_cmd + core_arg);
+    core_process->start(core_cmd, core_args);
     if (core_process->isOpen()) ui->statusbar->showMessage("boot");
 }
 
