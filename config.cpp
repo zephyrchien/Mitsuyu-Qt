@@ -1,6 +1,9 @@
 #include "config.h"
 
 Config::Config(const QString _base_path, const QString _config_file):
+    match_list(QStringList{"ip","port","prefix","suffix","keyword"}),
+    action_list(QStringList{"dns","next","block"}),
+    match_list_complex(QStringList{"ip_range","port_range","domain_prefix","domain_suffix","domain_contain"}),
     base_path(_base_path),
     config_file(_config_file)
 {
@@ -10,6 +13,8 @@ Config::Config(const QString _base_path, const QString _config_file):
     setConfigDefaultValue("tls","true");
     setConfigDefaultValue("tls_verify","true");
     setConfigDefaultValue("compress","true");
+    setConfigDefaultValue("strategy",QJsonArray());
+    rules = config.value("strategy").toArray();
 }
 
 Config::~Config()
@@ -35,6 +40,7 @@ bool Config::dumpConfig()
     auto fp = std::make_unique<QFile>(base_path + config_file);
     if (!fp->open(QIODevice::WriteOnly|QIODevice::Text)) return false;
     QJsonDocument doc;
+    config["strategy"] = rules;
     doc.setObject(config);
     fp->write(doc.toJson(QJsonDocument::Compact));
     return true;
@@ -43,6 +49,11 @@ bool Config::dumpConfig()
 QJsonObject& Config::getConfig()
 {
     return config;
+}
+
+QJsonArray& Config::getRules()
+{
+    return rules;
 }
 
 QString Config::getBasePath()
@@ -69,4 +80,21 @@ void Config::setConfigDefaultValue(const QString key, const QString value)
     {
         config[key] = value;
     }
+}
+
+void Config::setConfigDefaultValue(const QString key, const QJsonArray value)
+{
+    if (!config.contains(key))
+    {
+        config[key] = value;
+    }
+}
+
+QString Config::translateMatchRule(const QString src)
+{
+    for (int i = 0, l = match_list.count(); i < l; i++)
+    {
+        if (match_list[i] == src) return match_list_complex[i];
+    }
+    return "error";
 }

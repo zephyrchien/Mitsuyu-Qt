@@ -11,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
     // core process
     QAction *start_core = new QAction("boot",this);
     QAction *stop_core = new QAction("kill",this);
-    ui->menu_mitsuyux->addAction(stop_core);
     ui->menu_mitsuyux->addAction(start_core);
+    ui->menu_mitsuyux->addAction(stop_core);
     start_core->setStatusTip("boot");
     stop_core->setStatusTip("kill");
     connect(start_core,SIGNAL(triggered()),this,SLOT(oncore_start()));
@@ -29,11 +29,16 @@ MainWindow::MainWindow(QWidget *parent)
     config_log->setStatusTip("set log level");
     config_core->setStatusTip("load mitsuyu core");
     config_local->setStatusTip("set local client");
-    config_server->setStatusTip("set server server");
+    config_server->setStatusTip("set server");
     connect(config_log,SIGNAL(triggered()),this,SLOT(onconfig_log()));
     connect(config_core,SIGNAL(triggered()),this,SLOT(onconfig_core()));
     connect(config_local,SIGNAL(triggered()),this,SLOT(onconfig_local()));
     connect(config_server,SIGNAL(triggered()),this,SLOT(onconfig_server()));
+    // menubar->advance
+    QAction *advance_rules = new QAction("rules",this);
+    ui->menu_advance->addAction(advance_rules);
+    advance_rules->setStatusTip("set rules");
+    connect(advance_rules,SIGNAL(triggered()),this,SLOT(onconfig_rules()));
     // statusbar
     ui->statusbar->showMessage("ready");
 }
@@ -67,9 +72,42 @@ void MainWindow::oncore_start()
     ui->logs->append("command: " + core_cmd);
     for (int i = 0, l = core_args.length(); i < l; i++)
     {
-        ui->logs->append(QStringLiteral("argument[%1]: ").arg(i+1) + core_args[i]);
+        ui->logs->append(QString("argument[%1]: ").arg(i+1) + core_args[i]);
     }
-    ui->logs->append("\n");
+    QStringList keys = c.keys();
+    QString key;
+    for (int i = 0, j = 1, l = keys.count(); i < l; i++)
+    {
+        key = keys[i];
+        if (key == "core" || key == "strategy") continue;
+        ui->logs->append(QString("option[%1]: ").arg(j+1) + c.value(key).toString());
+        j++;
+    }
+    QJsonArray rules = c.value("strategy").toArray();
+    QJsonObject rule;
+    QString _m, _act, _m_val, _act_val;
+    for (int i = 0, l = rules.count(); i < l; i++)
+    {
+        rule = rules[i].toObject();
+        foreach (QString m, config->match_list)
+        {
+            QString m_complex = config->translateMatchRule(m);
+            if (rule.contains(m_complex))
+            {
+                _m = m;
+                _m_val = rule.value(m_complex).toString();
+            }
+        }
+        foreach (QString act, config->action_list)
+        {
+            if (rule.contains(act))
+            {
+                _act = act;
+                _act_val = rule.value(act).toString();
+            }
+        }
+        ui->logs->append(QString("rule[%1]: %2=%3 => %4=%5").arg(i+1).arg(_m).arg(_m_val).arg(_act).arg(_act_val));
+    }
 
     core_process = std::make_unique<QProcess>(this);
     core_process->setReadChannel(QProcess::StandardOutput);
@@ -134,7 +172,6 @@ void MainWindow::onconfig_log()
     if (!ok || log_level.isEmpty()) return;
     config->getConfig()["log"] = log_level;
     config->dumpConfig();
-    ui->logs->append("set log level: " + log_level);
 }
 
 void MainWindow::onconfig_core()
@@ -145,7 +182,7 @@ void MainWindow::onconfig_core()
     if (core_path.isEmpty()) return;
     config->getConfig()["core"] = core_path;
     config->dumpConfig();
-    ui->logs->append("new core: " + core_path);
+    this->ui->statusbar->showMessage("core: " + core_path);
 }
 
 void MainWindow::onconfig_local()
@@ -157,7 +194,7 @@ void MainWindow::onconfig_local()
     if (!ok || local.isEmpty()) return;
     config->getConfig()["local"] = local;
     config->dumpConfig();
-    ui->logs->append("set local address: " + local);
+    this->ui->statusbar->showMessage("local: " + local);
 }
 
 void MainWindow::onconfig_server()
@@ -167,6 +204,17 @@ void MainWindow::onconfig_server()
     connect(config_window.get(),&ConfigWindow::closeWindowSignal,[this](){
         disconnect(this->config_window.get());
         this->config_window.reset();
-        this->ui->statusbar->showMessage("close");
+        this->ui->statusbar->showMessage("done");
+    });
+}
+
+void MainWindow::onconfig_rules()
+{
+    rules_list = std::make_unique<RulesList>(nullptr, config);
+    rules_list->show();
+    connect(rules_list.get(),&RulesList::closeWindowSignal,[this](){
+        disconnect(this->rules_list.get());
+        this->rules_list.reset();
+        this->ui->statusbar->showMessage("done");
     });
 }

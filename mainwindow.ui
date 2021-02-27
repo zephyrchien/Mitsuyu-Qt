@@ -63,8 +63,14 @@
      <string>config</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menu_advance">
+    <property name="title">
+     <string>advance</string>
+    </property>
+   </widget>
    <addaction name="menu_mitsuyux"/>
    <addaction name="menu_config"/>
+   <addaction name="menu_advance"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

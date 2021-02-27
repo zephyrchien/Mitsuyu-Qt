@@ -12,16 +12,21 @@ SOURCES += \
     config.cpp \
     configwindow.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ruleslist.cpp \
+    ruleswindow.cpp
 
 HEADERS += \
     config.h \
     configwindow.h \
-    mainwindow.h
+    mainwindow.h \
+    ruleslist.h \
+    ruleswindow.h
 
 FORMS += \
     configwindow.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    ruleswindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

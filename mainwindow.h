@@ -7,12 +7,14 @@
 #include <QAction>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QListWidget>
 
 #include <memory>
 #include <thread>
 
 #include "config.h"
 #include "configwindow.h"
+#include "ruleslist.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,11 +37,13 @@ private slots:
     void onconfig_core();
     void onconfig_local();
     void onconfig_server();
+    void onconfig_rules();
 
 private:
     Ui::MainWindow *ui;
     std::shared_ptr<Config> config;
     std::unique_ptr<QProcess> core_process;
     std::unique_ptr<ConfigWindow> config_window;
+    std::unique_ptr<RulesList> rules_list;
 };
 #endif // MAINWINDOW_H
