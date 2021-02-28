@@ -76,11 +76,11 @@ void MainWindow::oncore_start()
     }
     QStringList keys = c.keys();
     QString key;
-    for (int i = 0, j = 1, l = keys.count(); i < l; i++)
+    for (int i = 0, j = 0, l = keys.count(); i < l; i++)
     {
         key = keys[i];
         if (key == "core" || key == "strategy") continue;
-        ui->logs->append(QString("option[%1]: ").arg(j+1) + c.value(key).toString());
+        ui->logs->append(QString("option[%1]: %2=%3").arg(j+1).arg(key).arg(c.value(key).toString()));
         j++;
     }
     QJsonArray rules = c.value("strategy").toArray();
@@ -166,7 +166,7 @@ void MainWindow::onconfig_log()
     QStringList levels;
     levels << "none" << "debug" << "info" << "error";
     const QString ps = "select log level";
-    const int default_level = 2;
+    const int default_level = levels.indexOf(config->getConfig().value("log").toString());
     bool ok;
     QString log_level = QInputDialog::getItem(this,"log",ps,levels,default_level,false,&ok);
     if (!ok || log_level.isEmpty()) return;
@@ -189,7 +189,7 @@ void MainWindow::onconfig_local()
 {
     bool ok;
     const QString ps = "listen address:";
-    const QString default_local = "127.0.0.1:1080";
+    const QString default_local = config->getConfig().value("local").toString();
     QString local = QInputDialog::getText(this,"local",ps,QLineEdit::Normal,default_local,&ok);
     if (!ok || local.isEmpty()) return;
     config->getConfig()["local"] = local;

@@ -79,7 +79,7 @@ QString RulesList::loadLine(const QJsonObject rule, int i)
             _act_val = rule.value(act).toString();
         }
     }
-    return QString("%1| %2=%3 |%4=%5").arg(i).arg(_m).arg(_m_val).arg(_act).arg(_act_val);
+    return QString("%1|%2=%3|%4=%5").arg(i).arg(_m).arg(_m_val).arg(_act).arg(_act_val);
 }
 
 void RulesList::online_edit()
