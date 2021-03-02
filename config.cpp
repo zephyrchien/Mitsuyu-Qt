@@ -13,8 +13,17 @@ Config::Config(const QString _base_path, const QString _config_file):
     setConfigDefaultValue("tls","true");
     setConfigDefaultValue("tls_verify","true");
     setConfigDefaultValue("compress","true");
+    setConfigDefaultValue("padding","0");
+    setConfigDefaultValue("upload_limit","0");
+    setConfigDefaultValue("download_limit","0");
+    setConfigDefaultValue("api_addr","127.0.0.1:10000");
     setConfigDefaultValue("strategy",QJsonArray());
     rules = config.value("strategy").toArray();
+    QString api_base_path = QString("http://%1/%2")
+            .arg(config.value("api_addr").toString())
+            .arg(config.value("service_name").toString());
+    api_url_conn = QUrl(api_base_path + "/connection");
+    api_url_traffic = QUrl(api_base_path + "/traffic");
 }
 
 Config::~Config()

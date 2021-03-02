@@ -7,6 +7,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QUrl>
 
 #include <memory>
 
@@ -19,6 +20,9 @@ public:
     const QStringList match_list;
     const QStringList action_list;
     const QStringList match_list_complex;
+
+    QUrl api_url_traffic;
+    QUrl api_url_conn;
 
     bool loadConfig();
     bool dumpConfig();
