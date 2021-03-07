@@ -7,6 +7,7 @@
 #include <QListWidget>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QDesktopWidget>
 
 #include <memory>
 

@@ -88,6 +88,9 @@ void RulesList::online_edit()
     if (items.isEmpty()) return;
     int row = list->row(items[0]);
     rules_window = std::make_unique<RulesWindow>(nullptr,config,row);
+    rules_window->setGeometry(QStyle::alignedRect(
+            Qt::LeftToRight, Qt::AlignCenter, rules_window->size(),
+            this->geometry()));
     rules_window->show();
     connect(rules_window.get(),&RulesWindow::closeWindowSignal,[this,items,row](){
         QJsonArray& rules = config->getRules();
@@ -102,6 +105,9 @@ void RulesList::online_edit()
 void RulesList::online_insert()
 {
     rules_window = std::make_unique<RulesWindow>(nullptr,config,-1);
+    rules_window->setGeometry(QStyle::alignedRect(
+            Qt::LeftToRight, Qt::AlignCenter, rules_window->size(),
+            this->geometry()));
     rules_window->show();
     connect(rules_window.get(),&RulesWindow::closeWindowSignal,[this](){
         if (list->count() < config->getRules().count())

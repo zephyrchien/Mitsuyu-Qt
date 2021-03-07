@@ -14,7 +14,7 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QScrollBar>
-#include <QDebug>
+#include <QDesktopWidget>
 
 #include <memory>
 #include <thread>

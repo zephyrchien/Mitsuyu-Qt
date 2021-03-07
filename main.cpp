@@ -11,6 +11,9 @@ int main(int argc, char *argv[])
     font.setPointSize(10);
     a.setFont(font);
     MainWindow w;
+    w.setGeometry(QStyle::alignedRect(
+        Qt::LeftToRight, Qt::AlignCenter, w.size(),
+        qApp->desktop()->availableGeometry()));
     w.show();
     return a.exec();
 }

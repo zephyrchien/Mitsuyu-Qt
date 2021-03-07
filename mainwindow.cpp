@@ -264,6 +264,9 @@ void MainWindow::onconfig_local()
 void MainWindow::onconfig_server()
 {
     config_window = std::make_unique<ConfigWindow>(nullptr,config);
+    config_window->setGeometry(QStyle::alignedRect(
+        Qt::LeftToRight, Qt::AlignCenter, config_window->size(),
+        this->geometry()));
     config_window->show();
     connect(config_window.get(),&ConfigWindow::closeWindowSignal,[this](){
         disconnect(this->config_window.get());
@@ -287,6 +290,9 @@ void MainWindow::onconfig_api()
 void MainWindow::onconfig_rules()
 {
     rules_list = std::make_unique<RulesList>(nullptr, config);
+    rules_list->setGeometry(QStyle::alignedRect(
+        Qt::LeftToRight, Qt::AlignCenter, rules_list->size(),
+        this->geometry()));
     rules_list->show();
     connect(rules_list.get(),&RulesList::closeWindowSignal,[this](){
         disconnect(this->rules_list.get());
