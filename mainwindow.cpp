@@ -320,8 +320,8 @@ void MainWindow::onconfig_reuse()
     if (params.count() != 2) return;
     QString timeout = params[0].trimmed();
     QString maxsize = params[1].trimmed();
-    config->getConfig()["upload_limit"] = timeout;
-    config->getConfig()["download_limit"] = maxsize;
+    config->getConfig()["reuse_timeout"] = timeout;
+    config->getConfig()["reuse_maxsize"] = maxsize;
     config->dumpConfig();
     this->ui->statusbar->showMessage(QString("reuse : %1/%2").arg(timeout).arg(maxsize));
 }
