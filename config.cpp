@@ -14,6 +14,8 @@ Config::Config(const QString _base_path, const QString _config_file):
     setConfigDefaultValue("tls_verify","true");
     setConfigDefaultValue("compress","true");
     setConfigDefaultValue("padding","0");
+    setConfigDefaultValue("reuse_timeout","0");
+    setConfigDefaultValue("reuse_maxsize","0");
     setConfigDefaultValue("upload_limit","0");
     setConfigDefaultValue("download_limit","0");
     setConfigDefaultValue("api_addr","127.0.0.1:10000");

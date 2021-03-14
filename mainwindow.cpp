@@ -41,18 +41,22 @@ MainWindow::MainWindow(QWidget *parent) :
     // menubar->advance
     QAction *advance_api = new QAction("api",this);
     QAction *advance_rules = new QAction("rules",this);
+    QAction *advance_reuse = new QAction("reuse",this);
     QAction *advance_limit = new QAction("limit",this);
     QAction *advance_padding = new QAction("padding",this);
     ui->menu_advance->addAction(advance_api);
     ui->menu_advance->addAction(advance_rules);
+    ui->menu_advance->addAction(advance_reuse);
     ui->menu_advance->addAction(advance_limit);
     ui->menu_advance->addAction(advance_padding);
     advance_api->setStatusTip("set api address");
     advance_rules->setStatusTip("set rules");
     advance_limit->setStatusTip("set speed limit");
+    advance_reuse->setStatusTip("set connection reuse");
     advance_padding->setStatusTip("set packet padding");
     connect(advance_api,SIGNAL(triggered()),this,SLOT(onconfig_api()));
     connect(advance_rules,SIGNAL(triggered()),this,SLOT(onconfig_rules()));
+    connect(advance_reuse,SIGNAL(triggered()),this,SLOT(onconfig_reuse()));
     connect(advance_limit,SIGNAL(triggered()),this,SLOT(onconfig_limit()));
     connect(advance_padding,SIGNAL(triggered()),this,SLOT(onconfig_padding()));
     // statusbar
@@ -299,6 +303,27 @@ void MainWindow::onconfig_rules()
         this->rules_list.reset();
         this->ui->statusbar->showMessage("done");
     });
+}
+
+void MainWindow::onconfig_reuse()
+{
+    bool ok;
+    const QString ps = "reuse connection, timeout/maxsize(sec):";
+    const QString default_reuse_timeout = config->getConfig().value("reuse_timeout").toString();
+    const QString default_reuse_maxsize = config->getConfig().value("reuse_maxsize").toString();
+    QString reuse = QInputDialog::getText(
+                this,"reuse",ps,
+                QLineEdit::Normal,QString("%1/%2").arg(default_reuse_timeout).arg(default_reuse_maxsize),&ok
+                );
+    if (!ok || reuse.isEmpty()) return;
+    QStringList params = reuse.split("/");
+    if (params.count() != 2) return;
+    QString timeout = params[0].trimmed();
+    QString maxsize = params[1].trimmed();
+    config->getConfig()["upload_limit"] = timeout;
+    config->getConfig()["download_limit"] = maxsize;
+    config->dumpConfig();
+    this->ui->statusbar->showMessage(QString("reuse : %1/%2").arg(timeout).arg(maxsize));
 }
 
 void MainWindow::onconfig_limit()

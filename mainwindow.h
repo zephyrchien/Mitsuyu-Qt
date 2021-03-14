@@ -48,6 +48,7 @@ private slots:
     void onconfig_server();
     void onconfig_api();
     void onconfig_rules();
+    void onconfig_reuse();
     void onconfig_limit();
     void onconfig_padding();
 
