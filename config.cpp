@@ -35,11 +35,11 @@ Config::~Config()
 
 bool Config::loadConfig()
 {
-    auto fp = std::make_unique<QFile>(base_path + config_file);
-    if (!fp->exists()) return false;
-    if (!fp->open(QIODevice::ReadOnly|QIODevice::Text)) return false;
+    QFile fp(base_path + config_file);
+    if (!fp.exists()) return false;
+    if (!fp.open(QIODevice::ReadOnly|QIODevice::Text)) return false;
     QJsonParseError err;
-    auto doc = QJsonDocument::fromJson(fp->readAll(),&err);
+    auto doc = QJsonDocument::fromJson(fp.readAll(),&err);
     if (err.error != QJsonParseError::NoError || doc.isNull() || !doc.isObject())
         return false;
     config = doc.object();
@@ -48,12 +48,12 @@ bool Config::loadConfig()
 
 bool Config::dumpConfig()
 {
-    auto fp = std::make_unique<QFile>(base_path + config_file);
-    if (!fp->open(QIODevice::WriteOnly|QIODevice::Text)) return false;
+    QFile fp(base_path + config_file);
+    if (!fp.open(QIODevice::WriteOnly|QIODevice::Text)) return false;
     QJsonDocument doc;
     config["strategy"] = rules;
     doc.setObject(config);
-    fp->write(doc.toJson(QJsonDocument::Compact));
+    fp.write(doc.toJson(QJsonDocument::Compact));
     return true;
 }
 

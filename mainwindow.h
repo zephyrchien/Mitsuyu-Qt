@@ -19,6 +19,7 @@
 #include <memory>
 #include <thread>
 
+#include "utils.h"
 #include "config.h"
 #include "configwindow.h"
 #include "ruleslist.h"

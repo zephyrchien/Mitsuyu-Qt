@@ -3,7 +3,7 @@ QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++14
+CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -22,7 +22,8 @@ HEADERS += \
     configwindow.h \
     mainwindow.h \
     ruleslist.h \
-    ruleswindow.h
+    ruleswindow.h \
+    utils.h
 
 FORMS += \
     configwindow.ui \

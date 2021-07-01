@@ -11,6 +11,7 @@
 
 #include <memory>
 
+#include "utils.h"
 #include "config.h"
 #include "ruleswindow.h"
 

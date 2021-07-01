@@ -6,9 +6,9 @@ RulesList::RulesList(QWidget *parent, std::shared_ptr<Config> _config) :
 {
     setWindowTitle("stream");
     setWindowIcon(QIcon(":/icon/mitsuyu/img/stream.jpg"));
-    list = std::make_unique<QListWidget>(this);
-    menu = std::make_unique<QMenu>(this);
-    layout = std::make_unique<QVBoxLayout>(this);
+    list = utils::make_unique<QListWidget>(this);
+    menu = utils::make_unique<QMenu>(this);
+    layout = utils::make_unique<QVBoxLayout>(this);
 
     layout->addWidget(list.get());
     setAttribute(Qt::WA_QuitOnClose,false);
@@ -87,7 +87,7 @@ void RulesList::online_edit()
     auto items = list->selectedItems();
     if (items.isEmpty()) return;
     int row = list->row(items[0]);
-    rules_window = std::make_unique<RulesWindow>(nullptr,config,row);
+    rules_window = utils::make_unique<RulesWindow>(nullptr,config,row);
     rules_window->setGeometry(QStyle::alignedRect(
             Qt::LeftToRight, Qt::AlignCenter, rules_window->size(),
             this->geometry()));
@@ -104,7 +104,7 @@ void RulesList::online_edit()
 
 void RulesList::online_insert()
 {
-    rules_window = std::make_unique<RulesWindow>(nullptr,config,-1);
+    rules_window = utils::make_unique<RulesWindow>(nullptr,config,-1);
     rules_window->setGeometry(QStyle::alignedRect(
             Qt::LeftToRight, Qt::AlignCenter, rules_window->size(),
             this->geometry()));

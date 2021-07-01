@@ -143,16 +143,16 @@ void MainWindow::oncore_start()
             .arg(_act).arg(_act_val));
     }
 
-    core_process = std::make_unique<QProcess>(this);
+    core_process = utils::make_unique<QProcess>(this);
     core_process->setReadChannel(QProcess::StandardOutput);
     connect(core_process.get(),SIGNAL(readyReadStandardOutput()),this,SLOT(onread_output()));
     connect(core_process.get(),SIGNAL(error(QProcess::ProcessError)),this,SLOT(oncore_error(QProcess::ProcessError)));
     core_process->start(core_cmd, core_args);
     if (core_process->isOpen()) ui->statusbar->showMessage("boot");
 
-    timer = std::make_unique<QTimer>(this);
-    netman_traffic = std::make_unique<QNetworkAccessManager>(this);
-    netman_conn = std::make_unique<QNetworkAccessManager>(this);
+    timer = utils::make_unique<QTimer>(this);
+    netman_traffic = utils::make_unique<QNetworkAccessManager>(this);
+    netman_conn = utils::make_unique<QNetworkAccessManager>(this);
     connect(timer.get(),SIGNAL(timeout()),this,SLOT(onstat_update()));
     connect(netman_traffic.get(),SIGNAL(finished(QNetworkReply*)),this,SLOT(onget_traffic_callback(QNetworkReply*)));
     connect(netman_conn.get(),SIGNAL(finished(QNetworkReply*)),this,SLOT(onget_conn_callback(QNetworkReply*)));
@@ -267,7 +267,7 @@ void MainWindow::onconfig_local()
 
 void MainWindow::onconfig_server()
 {
-    config_window = std::make_unique<ConfigWindow>(nullptr,config);
+    config_window = utils::make_unique<ConfigWindow>(nullptr,config);
     config_window->setGeometry(QStyle::alignedRect(
         Qt::LeftToRight, Qt::AlignCenter, config_window->size(),
         this->geometry()));
@@ -293,7 +293,7 @@ void MainWindow::onconfig_api()
 
 void MainWindow::onconfig_rules()
 {
-    rules_list = std::make_unique<RulesList>(nullptr, config);
+    rules_list = utils::make_unique<RulesList>(nullptr, config);
     rules_list->setGeometry(QStyle::alignedRect(
         Qt::LeftToRight, Qt::AlignCenter, rules_list->size(),
         this->geometry()));
